@@ -50,7 +50,7 @@
 
 ### インストール手順
 
-```bash
+```powershell
 # 1. リポジトリをクローン
 git clone https://github.com/sakurisaya/IdeaPost.git
 cd IdeaPost
@@ -63,11 +63,12 @@ npm install
 npm run build
 
 # 4. 環境ファイルを作成
-cp .env.example .env
+copy .env.example .env
 php artisan key:generate
 
 # 5. データベースを初期化（SQLite）
-touch database/database.sqlite
+New-Item database/database.sqlite -Force   # PowerShellの場合
+# ※ コマンドプロンプトの場合: type nul > database\database.sqlite
 php artisan migrate
 
 # 6. サンプルデータ投入（任意）
