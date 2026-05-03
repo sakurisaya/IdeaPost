@@ -69,6 +69,9 @@ php artisan key:generate
 # 5. データベースを初期化（SQLite）
 touch database/database.sqlite
 php artisan migrate
+
+# 6. サンプルデータ投入（任意）
+php artisan db:seed --class=SampleSeeder
 ```
 
 ---
