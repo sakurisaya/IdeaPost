@@ -50,6 +50,10 @@
 
 ### インストール手順
 
+> [!IMPORTANT]
+> **`IdeaPost.bat` を起動する前に、必ず以下の手順を完了してください。**
+> セットアップ未完了のまま起動すると「ページに到達できません」エラーになります。
+
 ```powershell
 # 1. リポジトリをクローン
 git clone https://github.com/sakurisaya/IdeaPost.git
@@ -66,7 +70,7 @@ npm run build
 copy .env.example .env
 php artisan key:generate
 
-# 5. データベースを初期化（SQLite）
+# 5. データベースを初期化（SQLite）— ⚠️ この手順を忘れると起動しません
 New-Item database/database.sqlite -Force   # PowerShellの場合
 # ※ コマンドプロンプトの場合: type nul > database\database.sqlite
 php artisan migrate
@@ -75,11 +79,17 @@ php artisan migrate
 php artisan db:seed --class=SampleSeeder
 ```
 
+> [!NOTE]
+> 手順5のデータベース初期化は **初回のみ** 必要です。2回目以降は `IdeaPost.bat` のダブルクリックだけで起動できます。
+
 ---
 
 ## ▶️ 起動方法
 
-### バッチファイルで起動
+> [!WARNING]
+> **初回起動前に上記のセットアップを必ず完了してください。**
+
+### バッチファイルで起動（初回セットアップ完了後）
 
 `IdeaPost.bat` をダブルクリックするだけで起動できます。
 
