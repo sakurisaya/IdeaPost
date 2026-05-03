@@ -1,23 +1,23 @@
 # IdeaPost タスクリスト
 
-- `[/]` 1. Laravel プロジェクトと Tailwind CSS の初期化
+- `[x]` 1. Laravel プロジェクトと Tailwind CSS の初期化
   - `[x]` Laravelプロジェクト作成
-  - `[/]` Tailwind CSSのインストールと設定
-  - `[ ]` Gitリポジトリ初期化
-- `[ ]` 2. パッケージ導入・DB設定
+  - `[x]` Tailwind CSSのインストールと設定
+  - `[x]` Gitリポジトリ初期化
+- `[/]` 2. パッケージ導入・DB設定
   - `[ ]` SQLite データベースの構成
   - `[ ]` dompdf, league/commonmark のインストール
-- `[ ]` 3. バックエンド実装 (DB & Models)
-  - `[ ]` マイグレーション作成 (books, notes)
-  - `[ ]` モデル作成 (Book, Note - 論理削除対応)
-- `[ ]` 4. コントローラーとルーティング
-  - `[ ]` BookController (CRUD, PDF)
-  - `[ ]` NoteController (CRUD, move API)
-  - `[ ]` web.php のルーティング定義
-- `[ ]` 5. フロントエンド実装 (UI & D&D)
-  - `[ ]` Bladeテンプレート (3カラムレイアウト)
-  - `[ ]` SortableJS によるドラッグ＆ドロップ実装
-  - `[ ]` API連携 (保存・並び替え)
-- `[ ]` 6. 動作確認・検証
-  - `[ ]` 基本機能テスト
-  - `[ ]` PDF出力テスト
+- `[x]` 3. バックエンド実装 (DB & Models)
+  - `[x]` マイグレーション作成 (books, notes)
+  - `[x]` モデル作成 (Book, Note - 論理削除対応)
+- `[x]` 4. コントローラーとルーティング
+  - `[x]` BookController (CRUD, PDF)
+  - `[x]` NoteController (CRUD, move API)
+  - `[x]` web.php のルーティング定義
+- `[x]` 5. フロントエンド実装 (UI & D&D)
+  - `[x]` Bladeテンプレート (3カラムレイアウト)
+  - `[x]` SortableJS によるドラッグ＆ドロップ実装
+  - `[x]` API連携 (保存・並び替え)
+- `[x]` 6. 動作確認・検証
+  - `[x]` 基本機能テスト
+  - `[x]` PDF出力テスト
