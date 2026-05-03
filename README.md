@@ -1,58 +1,166 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 💡 IdeaPost
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> アイデアをすばやくメモし、ブックで整理する、ローカル動作の高速メモアプリ。
 
-## About Laravel
+![メインビュー](docs/screenshots/screenshot_main.png)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ 特徴
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **3カラムレイアウト** — ブック一覧・メモ一覧・編集エリアを並列表示
+- **Quick Add** — テキストフォームに入力して `Enter` を押すだけでメモ/ブックを即時保存
+- **Markdownサポート** — メモはMarkdown記法で記述でき、プレビューも確認可能
+- **PDF出力** — ブック単位でPDF出力（日本語フォント対応）
+- **ドラッグ＆ドロップ** — メモを別のブックへD&Dで移動・並べ替え
+- **ゴミ箱・復元** — 削除したブック/メモは直近のものを一覧から復元可能
+- **ブック名インライン編集** — ✏️ アイコンから即時リネーム
+- **カラム幅調整** — 境界線をドラッグして各カラムの幅を自由にリサイズ
+- **クリップボードコピー** — ブック全体/個別メモをワンクリックでコピー
+- **ローカル完結** — データはすべてローカルのSQLiteに保存
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📸 スクリーンショット
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### メイン画面（3カラムレイアウト）
+![メイン画面](docs/screenshots/screenshot_main.png)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### メモ編集（Markdownサポート）
+![メモ編集](docs/screenshots/screenshot_edit.png)
 
-## Agentic Development
+### PDF出力
+![PDF出力](docs/screenshots/screenshot_pdf.png)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### ゴミ箱・復元
+![ゴミ箱](docs/screenshots/screenshot_trash.png)
+
+### デスクトップアプリとして起動
+![アプリモード](docs/screenshots/screenshot_app.png)
+
+---
+
+## 🚀 セットアップ
+
+### 必要環境
+
+- PHP 8.2+
+- Composer
+- Node.js / npm
+
+### インストール手順
 
 ```bash
-composer require laravel/boost --dev
+# 1. リポジトリをクローン
+git clone https://github.com/sakurisaya/IdeaPost.git
+cd IdeaPost
 
-php artisan boost:install
+# 2. PHP依存パッケージをインストール
+composer install
+
+# 3. フロントエンド依存パッケージをインストール＆ビルド
+npm install
+npm run build
+
+# 4. 環境ファイルを作成
+cp .env.example .env
+php artisan key:generate
+
+# 5. データベースを初期化（SQLite）
+touch database/database.sqlite
+php artisan migrate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## ▶️ 起動方法
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 方法①：バッチファイルで起動（推奨）
 
-## Code of Conduct
+`IdeaPost.bat` をダブルクリックするだけで起動できます。
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- PHPサーバーを自動起動
+- Microsoft Edgeが**アプリモード**（アドレスバーなし）で自動的に開きます
 
-## Security Vulnerabilities
+```
+IdeaPost.bat をダブルクリック → Edgeアプリウィンドウが開く
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+> **デスクトップショートカット作成：** `IdeaPost.bat` を右クリック → ショートカットの作成 → デスクトップへ移動
 
-## License
+### 方法②：コマンドラインで起動
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan serve
+```
+
+ブラウザで `http://127.0.0.1:8000` を開いてください。
+
+### 方法③：Edgeのアプリとしてインストール
+
+1. `http://127.0.0.1:8000` をEdgeで開く
+2. 右上メニュー（`⋯`）→ **アプリ** → **このサイトをアプリとしてインストール**
+3. スタートメニューやタスクバーから起動可能になります
+
+---
+
+## 📖 使い方
+
+### ブックを作成する
+- 左カラム上部の入力欄にブック名を入力して `Enter`
+
+### ブック名を変更する
+- ブック名にホバー → ✏️ アイコンをクリック → 入力して `Enter`
+
+### メモを追加する
+- 中央カラム上部の入力欄にメモ内容を入力して `Enter`
+
+### メモを編集する
+- メモカードをクリックして右カラムで編集 → `Enter` で保存（`Shift+Enter` で改行）
+
+### PDF出力する
+- ブック名にホバー → 📄 アイコンをクリック
+
+### 削除したデータを復元する
+- 左カラム下部の **「ゴミ箱」ボタン** → 直近削除したブック/メモを復元可能
+
+---
+
+## 🗂️ ディレクトリ構成（主要ファイル）
+
+```
+IdeaPost/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── BookController.php   # ブック CRUD + PDF出力
+│   │   └── NoteController.php   # メモ CRUD + 並べ替え
+│   └── Models/
+│       ├── Book.php             # ソフトデリート対応
+│       └── Note.php
+├── resources/views/
+│   ├── layouts/app.blade.php    # 共通レイアウト
+│   └── home.blade.php           # メインUI
+├── routes/web.php               # ルーティング
+├── storage/fonts/               # IPAexGothicフォント（PDF用）
+├── IdeaPost.bat                 # Windows 起動スクリプト
+└── IdeaPost.ps1                 # PowerShellバックエンド
+```
+
+---
+
+## 🛠️ 技術スタック
+
+| 区分 | 技術 |
+|---|---|
+| バックエンド | Laravel 11 / PHP 8.2 |
+| データベース | SQLite |
+| フロントエンド | Blade / Tailwind CSS v4 |
+| PDF生成 | Dompdf + IPAexGothicフォント |
+| Markdown | League/CommonMark |
+| D&D | SortableJS |
+
+---
+
+## 📝 ライセンス
+
+MIT License
