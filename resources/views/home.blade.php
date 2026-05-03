@@ -14,10 +14,10 @@
                 <form method="POST" action="{{ route('books.store') }}" class="flex items-center gap-2">
                     @csrf
                     <input type="text" name="title" required
-                        class="flex-1 border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm bg-white"
+                        class="flex-1 border border-slate-300 rounded-lg p-2 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition text-sm bg-white"
                         placeholder="新規ブック... (Enter)">
                     <button type="submit"
-                        class="bg-cyan-400 hover:bg-indigo-700 text-white p-2 rounded-lg transition shadow-sm shrink-0"
+                        class="bg-cyan-400 hover:bg-cyan-700 text-white p-2 rounded-lg transition shadow-sm shrink-0"
                         title="追加">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -44,7 +44,7 @@
                         onclick="selectBook({{ $book->id }})" data-book-id="{{ $book->id }}" ondragover="event.preventDefault()"
                         ondrop="dropNoteToBook(event, {{ $book->id }})">
                         <div class="flex items-center gap-2 truncate pr-2">
-                            <svg class="w-5 h-5 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-5 h-5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
                                 </path>
@@ -114,12 +114,12 @@
                     @csrf
                     <input type="hidden" name="book_id" id="quick-add-book-id" value="">
                     <textarea name="content" id="quick-add-content" required
-                        class="flex-1 border border-slate-300 rounded-lg p-2.5 resize-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition text-sm bg-white"
+                        class="flex-1 border border-slate-300 rounded-lg p-2.5 resize-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 outline-none transition text-sm bg-white"
                         rows="1" placeholder="新しいメモを入力... (Enterで保存)"
                         oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
                         style="max-height: 150px; min-height: 42px;"></textarea>
                     <button type="submit"
-                        class="bg-cyan-400 hover:bg-indigo-700 text-white p-2.5 rounded-lg transition shadow-sm shrink-0"
+                        class="bg-cyan-400 hover:bg-cyan-700 text-white p-2.5 rounded-lg transition shadow-sm shrink-0"
                         title="保存">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -133,7 +133,7 @@
                 <div class="notes-container" id="notes-container-null">
                     <div class="sortable-list space-y-3 min-h-[100px]" data-book-id="null">
                         @foreach($unassignedNotes as $note)
-                            <div class="note-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-grab active:cursor-grabbing hover:shadow-md hover:border-indigo-300 transition"
+                            <div class="note-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-grab active:cursor-grabbing hover:shadow-md hover:border-cyan-300 transition"
                                 data-id="{{ $note->id }}" data-content="{{ htmlspecialchars($note->content) }}"
                                 onclick="selectNote(this)">
                                 <div class="text-sm text-slate-600 line-clamp-3 note-preview">
@@ -149,7 +149,7 @@
                     <div class="notes-container hidden" id="notes-container-{{ $book->id }}">
                         <div class="sortable-list space-y-3 min-h-[100px]" data-book-id="{{ $book->id }}">
                             @foreach($book->notes as $note)
-                                <div class="note-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-grab active:cursor-grabbing hover:shadow-md hover:border-indigo-300 transition"
+                                <div class="note-card bg-white p-4 rounded-xl shadow-sm border border-slate-200 cursor-grab active:cursor-grabbing hover:shadow-md hover:border-cyan-300 transition"
                                     data-id="{{ $note->id }}" data-content="{{ htmlspecialchars($note->content) }}"
                                     onclick="selectNote(this)">
                                     <div class="text-sm text-slate-600 line-clamp-3 note-preview">
@@ -204,7 +204,7 @@
                     </div>
                     <div class="p-4 border-t border-slate-200 bg-slate-50 flex justify-end">
                         <button type="submit"
-                            class="bg-cyan-400 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-lg font-medium transition shadow-sm shadow-indigo-200">保存</button>
+                            class="bg-cyan-400 hover:bg-cyan-700 text-white px-6 py-2.5 rounded-lg font-medium transition shadow-sm shadow-cyan-200">保存</button>
                     </div>
                 </form>
             </div>
@@ -247,7 +247,7 @@
                                     <form method="POST" action="{{ route('books.restore', $dBook->id) }}">
                                         @csrf
                                         <button type="submit"
-                                            class="text-cyan-400 hover:text-indigo-800 text-sm font-medium px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition border border-indigo-200">復元</button>
+                                            class="text-cyan-400 hover:text-cyan-800 text-sm font-medium px-4 py-1.5 bg-cyan-50 hover:bg-cyan-100 rounded-lg transition border border-cyan-200">復元</button>
                                     </form>
                                 </div>
                             @endforeach
@@ -271,7 +271,7 @@
                                     <form method="POST" action="{{ route('notes.restore', $dNote->id) }}" class="shrink-0">
                                         @csrf
                                         <button type="submit"
-                                            class="text-cyan-400 hover:text-indigo-800 text-sm font-medium px-4 py-1.5 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition border border-indigo-200">復元</button>
+                                            class="text-cyan-400 hover:text-cyan-800 text-sm font-medium px-4 py-1.5 bg-cyan-50 hover:bg-cyan-100 rounded-lg transition border border-cyan-200">復元</button>
                                     </form>
                                 </div>
                             @endforeach
@@ -328,11 +328,11 @@
 
             document.querySelectorAll('.book-list-item').forEach(el => {
                 if (el.dataset.bookId === targetBookIdStr) {
-                    el.classList.add('bg-indigo-50', 'text-indigo-700', 'border-indigo-200');
+                    el.classList.add('text-cyan-700', 'border-cyan-200');
                     el.classList.remove('text-slate-700');
                     document.getElementById('current-book-title').innerText = el.querySelector('span').innerText;
                 } else {
-                    el.classList.remove('bg-indigo-50', 'text-indigo-700', 'border-indigo-200');
+                    el.classList.remove('text-cyan-700', 'border-cyan-200');
                     el.classList.add('text-slate-700');
                 }
             });
@@ -352,12 +352,12 @@
 
         function selectNote(card) {
             if (selectedNoteCard) {
-                selectedNoteCard.classList.remove('border-indigo-500', 'ring-2', 'ring-indigo-200');
+                selectedNoteCard.classList.remove('border-cyan-500', 'ring-2', 'ring-cyan-200');
                 selectedNoteCard.classList.add('border-slate-200');
             }
             selectedNoteCard = card;
             card.classList.remove('border-slate-200');
-            card.classList.add('border-indigo-500', 'ring-2', 'ring-indigo-200');
+            card.classList.add('border-cyan-500', 'ring-2', 'ring-cyan-200');
 
             const noteId = card.dataset.id;
             const content = card.dataset.content;
@@ -378,7 +378,7 @@
 
         function deselectNote() {
             if (selectedNoteCard) {
-                selectedNoteCard.classList.remove('border-indigo-500', 'ring-2', 'ring-indigo-200');
+                selectedNoteCard.classList.remove('border-cyan-500', 'ring-2', 'ring-cyan-200');
                 selectedNoteCard.classList.add('border-slate-200');
                 selectedNoteCard = null;
             }
@@ -474,7 +474,7 @@
 
         function dropNoteToBook(e, targetBookId) {
             e.preventDefault();
-            e.currentTarget.classList.remove('bg-indigo-100');
+            e.currentTarget.classList.remove('bg-cyan-100');
 
             if (!draggedNoteId || targetBookId == currentBookId) return;
 
@@ -491,11 +491,11 @@
         document.querySelectorAll('.book-list-item').forEach(item => {
             item.addEventListener('dragenter', function (e) {
                 if (draggedNoteId && this.dataset.bookId != currentBookId) {
-                    this.classList.add('bg-indigo-100');
+                    this.classList.add('bg-cyan-100');
                 }
             });
             item.addEventListener('dragleave', function (e) {
-                this.classList.remove('bg-indigo-100');
+                this.classList.remove('bg-cyan-100');
             });
         });
 
