@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex w-full h-full">
+    <div class="flex w-full h-full" id="main-layout">
 
         <!-- Sidebar: Books -->
-        <div class="w-64 bg-slate-100 border-r border-slate-200 flex flex-col h-full shrink-0">
+        <div id="sidebar-col" class="bg-slate-100 border-r border-slate-200 flex flex-col h-full shrink-0" style="width:256px; min-width:160px;">
             <div class="p-4 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
                 <h2 class="font-bold text-slate-700">ブック一覧</h2>
             </div>
@@ -40,33 +40,51 @@
                 </div>
 
                 @foreach($books as $book)
-                    <div class="book-list-item cursor-pointer p-3 rounded-lg hover:bg-slate-200 text-slate-700 transition flex justify-between items-center group"
+                    <div class="book-list-item cursor-pointer p-2 rounded-lg hover:bg-slate-200 text-slate-700 transition flex justify-between items-center group"
                         onclick="selectBook({{ $book->id }})" data-book-id="{{ $book->id }}" ondragover="event.preventDefault()"
                         ondrop="dropNoteToBook(event, {{ $book->id }})">
-                        <div class="flex items-center gap-2 truncate pr-2">
-                            <svg class="w-5 h-5 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- 通常表示 -->
+                        <div class="book-label flex items-center gap-2 truncate pr-1 flex-1 min-w-0">
+                            <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
                                 </path>
                             </svg>
-                            <span class="font-medium truncate">{{ $book->title }}</span>
+                            <span class="font-medium truncate text-sm">{{ $book->title }}</span>
                         </div>
-                        <div class="flex items-center opacity-0 group-hover:opacity-100 transition shrink-0 bg-slate-200/80 rounded"
+                        <!-- インライン編集フォーム（隠し） -->
+                        <form class="book-edit-form hidden flex-1" method="POST" action="{{ route('books.update', $book) }}"
+                            onclick="event.stopPropagation()" onsubmit="event.stopPropagation()">
+                            @csrf
+                            @method('PUT')
+                            <input type="text" name="title" value="{{ $book->title }}"
+                                class="w-full border border-cyan-400 rounded px-2 py-0.5 text-sm focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                                onkeydown="if(event.key==='Escape'){cancelEditBook(this.closest('.book-list-item'))}">
+                        </form>
+                        <!-- アクションアイコン群 -->
+                        <div class="flex items-center opacity-0 group-hover:opacity-100 transition shrink-0 rounded"
                             onclick="event.stopPropagation()">
+                            <!-- 編集 -->
+                            <button type="button" class="text-slate-400 hover:text-cyan-500 p-1.5 transition" title="名前変更"
+                                onclick="startEditBook(this.closest('.book-list-item'))">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            </button>
+                            <!-- PDF -->
                             <a href="{{ route('books.pdf', $book) }}" target="_blank"
                                 class="text-slate-400 hover:text-cyan-400 p-1.5 transition" title="PDF出力">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                     </path>
                                 </svg>
                             </a>
+                            <!-- 削除 -->
                             <form method="POST" action="{{ route('books.destroy', $book) }}" class="inline-block m-0 p-0"
                                 onsubmit="return confirm('本当にこのブックを削除しますか？\n（ゴミ箱から復元可能です）')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-slate-400 hover:text-red-500 p-1.5 transition" title="削除">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
                                         </path>
@@ -92,9 +110,12 @@
             </div>
         </div>
 
+        <!-- Resize Handle: sidebar | middle -->
+        <div class="resize-handle" id="resize-1" style="width:5px;cursor:col-resize;background:transparent;hover:background:#e2e8f0;flex-shrink:0;"></div>
+
         <!-- Middle Column: Notes List -->
         <div id="middle-column"
-            class="flex-1 bg-white border-r border-slate-200 flex flex-col h-full shrink-0 transition-all">
+            class="bg-white border-r border-slate-200 flex flex-col h-full shrink-0" style="width:320px;min-width:180px;">
             <div class="p-4 border-b border-slate-200 bg-white flex items-center gap-3 shadow-sm z-10">
                 <h2 class="font-bold text-slate-800 truncate flex-shrink min-w-0" id="current-book-title">未分類</h2>
                 <button onclick="copyCurrentBook()" class="text-slate-400 hover:text-cyan-400 transition shrink-0"
@@ -163,8 +184,11 @@
             </div>
         </div>
 
+        <!-- Resize Handle: middle | right -->
+        <div class="resize-handle" id="resize-2" style="width:5px;cursor:col-resize;background:transparent;flex-shrink:0;"></div>
+
         <!-- Right Column: Edit Area -->
-        <div id="right-column" class="flex-1 bg-white h-full flex flex-col relative hidden">
+        <div id="right-column" class="flex-1 bg-white h-full flex flex-col relative hidden" style="min-width:240px;">
             <div id="edit-area" class="h-full flex flex-col">
                 <div class="p-4 border-b border-slate-200 flex justify-between items-center bg-white shadow-sm z-10">
                     <div class="flex gap-4 border-b border-slate-200 w-full mb-[-17px]">
@@ -182,11 +206,12 @@
                                 </path>
                             </svg>
                         </button>
-                        <form id="delete-note-form" method="POST" action="" onsubmit="return confirm('本当に削除しますか？')">
+                        <form id="delete-note-form" method="POST" action="" onsubmit="return confirm('このメモを削除しますか？')">
                             @csrf
                             @method('DELETE')
-                            <button type="submit"
-                                class="text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg text-sm font-medium transition">削除</button>
+                            <button type="submit" class="text-slate-400 hover:text-red-500 transition p-1" title="削除">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -283,6 +308,55 @@
     </div>
 
     <script>
+        // ── カラムリサイズ ──
+        function makeResizable(handleId, leftColId) {
+            const handle = document.getElementById(handleId);
+            const leftCol = document.getElementById(leftColId);
+            if (!handle || !leftCol) return;
+            let startX, startW;
+            handle.addEventListener('mousedown', e => {
+                startX = e.clientX;
+                startW = leftCol.offsetWidth;
+                document.body.style.cursor = 'col-resize';
+                document.body.style.userSelect = 'none';
+                const onMove = ev => {
+                    const newW = Math.max(leftCol.style.minWidth ? parseInt(leftCol.style.minWidth) : 160, startW + ev.clientX - startX);
+                    leftCol.style.width = newW + 'px';
+                };
+                const onUp = () => {
+                    document.body.style.cursor = '';
+                    document.body.style.userSelect = '';
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                };
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+            });
+            handle.addEventListener('mouseenter', () => handle.style.background = '#cbd5e1');
+            handle.addEventListener('mouseleave', () => handle.style.background = 'transparent');
+        }
+
+        // ── ブック名インライン編集 ──
+        function startEditBook(item) {
+            item.querySelector('.book-label').classList.add('hidden');
+            const form = item.querySelector('.book-edit-form');
+            form.classList.remove('hidden');
+            const input = form.querySelector('input');
+            input.focus();
+            input.select();
+            // Enter で submit
+            input.onkeydown = function(e) {
+                if (e.key === 'Enter') { e.preventDefault(); form.submit(); }
+                if (e.key === 'Escape') cancelEditBook(item);
+            };
+        }
+        function cancelEditBook(item) {
+            item.querySelector('.book-label').classList.remove('hidden');
+            item.querySelector('.book-edit-form').classList.add('hidden');
+        }
+    </script>
+
+    <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         let currentBookId = null;
         let selectedNoteCard = null;
@@ -296,6 +370,8 @@
             }
 
             initSortable();
+            makeResizable('resize-1', 'sidebar-col');
+            makeResizable('resize-2', 'middle-column');
 
             // Enter to save note (Edit Area)
             const noteContent = document.getElementById('note-content');
