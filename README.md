@@ -2,7 +2,7 @@
 
 > アイデアをすばやくメモし、ブックで整理する、ローカル動作の高速メモアプリ。
 
-![メインビュー](docs/screenshots/screenshot_main.png)
+![メインビュー](public/images/screenshots/screenshot_main.png)
 
 ---
 
@@ -24,19 +24,19 @@
 ## 📸 スクリーンショット
 
 ### メイン画面（3カラムレイアウト）
-![メイン画面](docs/screenshots/screenshot_main.png)
+![メイン画面](public/images/screenshots/screenshot_main.png)
 
 ### メモ編集（Markdownサポート）
-![メモ編集](docs/screenshots/screenshot_edit.png)
+![メモ編集](public/images/screenshots/screenshot_edit.png)
 
 ### PDF出力
-![PDF出力](docs/screenshots/screenshot_pdf.png)
+![PDF出力](public/images/screenshots/screenshot_pdf.png)
 
 ### ゴミ箱・復元
-![ゴミ箱](docs/screenshots/screenshot_trash.png)
+![ゴミ箱](public/images/screenshots/screenshot_trash.png)
 
 ### デスクトップアプリとして起動
-![アプリモード](docs/screenshots/screenshot_app.png)
+![アプリモード](public/images/screenshots/screenshot_app.png)
 
 ---
 

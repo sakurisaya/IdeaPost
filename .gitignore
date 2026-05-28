@@ -28,3 +28,4 @@ Thumbs.db
 /test*.pdf
 /database/database.sqlite
 *.lnk
+/docs
