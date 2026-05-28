@@ -27,6 +27,7 @@
             </div>
 
             <div class="overflow-y-auto flex-1 p-2 space-y-1" id="book-sidebar">
+                <div id="book-sortable-list">
                 <div class="book-list-item cursor-pointer p-3 rounded-lg hover:bg-slate-200 text-slate-700 transition"
                     onclick="selectBook(null)" data-book-id="null" ondragover="event.preventDefault()"
                     ondrop="dropNoteToBook(event, null)">
@@ -41,8 +42,15 @@
 
                 @foreach($books as $book)
                     <div class="book-list-item cursor-pointer p-2 rounded-lg hover:bg-slate-200 text-slate-700 transition flex justify-between items-center group"
-                        onclick="selectBook({{ $book->id }})" data-book-id="{{ $book->id }}" ondragover="event.preventDefault()"
-                        ondrop="dropNoteToBook(event, {{ $book->id }})">
+                        onclick="selectBook({{ $book->id }})" data-book-id="{{ $book->id }}" data-id="{{ $book->id }}"
+                        ondragover="event.preventDefault()" ondrop="dropNoteToBook(event, {{ $book->id }})">
+                        <!-- ドラッグハンドル -->
+                        <div class="book-drag-handle shrink-0 text-slate-300 hover:text-slate-500 cursor-grab active:cursor-grabbing mr-1 opacity-0 group-hover:opacity-100 transition"
+                            title="ドラッグして並び替え" onclick="event.stopPropagation()">
+                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM8 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                            </svg>
+                        </div>
                         <!-- 通常表示 -->
                         <div class="book-label flex items-center gap-2 truncate pr-1 flex-1 min-w-0">
                             <svg class="w-4 h-4 text-cyan-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,6 +102,7 @@
                         </div>
                     </div>
                 @endforeach
+                </div><!-- /book-sortable-list -->
             </div>
 
             <!-- Trash Button -->
@@ -509,6 +518,7 @@
         }
 
         function initSortable() {
+            // メモの並び替え
             document.querySelectorAll('.sortable-list').forEach(list => {
                 new Sortable(list, {
                     group: 'notes',
@@ -535,6 +545,52 @@
                     }
                 });
             });
+
+            // ブックの並び替え
+            const bookList = document.getElementById('book-sortable-list');
+            if (bookList) {
+                new Sortable(bookList, {
+                    animation: 150,
+                    ghostClass: 'opacity-50',
+                    handle: '.book-drag-handle',
+                    filter: '.book-edit-form, input, button, a, form',
+                    preventOnFilter: false,
+                    onEnd: function (evt) {
+                        const item = evt.item;
+                        const bookId = item.dataset.id;
+
+                        let prevBookId = null;
+                        let nextBookId = null;
+
+                        if (item.previousElementSibling) {
+                            prevBookId = item.previousElementSibling.dataset.id;
+                        }
+                        if (item.nextElementSibling) {
+                            nextBookId = item.nextElementSibling.dataset.id;
+                        }
+
+                        saveBookReorderAPI(bookId, prevBookId, nextBookId);
+                    }
+                });
+            }
+        }
+
+        function saveBookReorderAPI(bookId, prevBookId, nextBookId) {
+            fetch('/books/reorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    book_id: bookId,
+                    prev_book_id: prevBookId,
+                    next_book_id: nextBookId
+                })
+            }).then(res => res.json()).then(data => {
+                console.log('Book reorder saved');
+            }).catch(err => console.error(err));
         }
 
         let draggedNoteId = null;

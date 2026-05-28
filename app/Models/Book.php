@@ -15,6 +15,7 @@ class Book extends Model
     protected $fillable = [
         'title',
         'description',
+        'sort_order',
     ];
 
     public function notes(): HasMany

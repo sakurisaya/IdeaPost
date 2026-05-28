@@ -12,6 +12,7 @@ Route::put('/books/{book}', [BookController::class, 'update'])->name('books.upda
 Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
 Route::post('/books/{id}/restore', [BookController::class, 'restore'])->name('books.restore');
 Route::get('/books/{book}/pdf', [BookController::class, 'pdf'])->name('books.pdf');
+Route::post('/books/reorder', [BookController::class, 'reorder'])->name('books.reorder');
 
 Route::post('/notes', [NoteController::class, 'store'])->name('notes.store');
 Route::put('/notes/{note}', [NoteController::class, 'update'])->name('notes.update');

@@ -16,7 +16,7 @@ class BookController extends Controller
     {
         $books = Book::with(['notes' => function($query) {
             $query->orderBy('sort_order');
-        }])->get();
+        }])->orderBy('sort_order')->get();
         
         $unassignedNotes = Note::whereNull('book_id')->orderBy('sort_order')->get();
         
@@ -67,6 +67,46 @@ class BookController extends Controller
         return back()->with('success', 'ブックを復元しました。')->with('selected_book', $book->id);
     }
 
+    public function reorder(Request $request)
+    {
+        $validated = $request->validate([
+            'book_id'      => 'required|exists:books,id',
+            'prev_book_id' => 'nullable|exists:books,id',
+            'next_book_id' => 'nullable|exists:books,id',
+        ]);
+
+        $book = Book::findOrFail($validated['book_id']);
+
+        $prevOrder = 0;
+        $nextOrder = 0;
+
+        if (!empty($validated['prev_book_id'])) {
+            $prevOrder = Book::find($validated['prev_book_id'])->sort_order;
+        }
+
+        if (!empty($validated['next_book_id'])) {
+            $nextOrder = Book::find($validated['next_book_id'])->sort_order;
+        }
+
+        if ($prevOrder && $nextOrder) {
+            $book->sort_order = (int) (($prevOrder + $nextOrder) / 2);
+        } elseif ($prevOrder) {
+            $book->sort_order = $prevOrder + 100;
+        } elseif ($nextOrder) {
+            $book->sort_order = max(1, (int) ($nextOrder / 2));
+        } else {
+            $book->sort_order = 100;
+        }
+
+        if ($book->sort_order == $prevOrder) {
+            $book->sort_order = $prevOrder + 1;
+        }
+
+        $book->save();
+
+        return response()->json(['success' => true]);
+    }
+
     public function pdf(Book $book)
     {
         $notes = $book->notes()->orderBy('sort_order')->get();
@@ -96,8 +136,12 @@ class BookController extends Controller
         // by the font-family name "ipaexg" which matches installed-fonts.json
         $html = '<html><head><meta charset="UTF-8"><style>
             * { font-family: "ipaexg"; }
-            body { line-height: 1.6; margin: 40px; }
-            h1, h2, h3, h4, h5, h6 { color: #333; }
+            body { line-height: 1.6; margin: 40px; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; }
+            h1, h2, h3, h4, h5, h6 { color: #333; word-wrap: break-word; overflow-wrap: break-word; }
+            p, li, td, th, blockquote { word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; }
+            pre, code { white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all; background: #f5f5f5; padding: 2px 4px; }
+            table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            img { max-width: 100%; }
             .note { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #ccc; }
         </style></head><body>' . $bodyHtml . '</body></html>';
 

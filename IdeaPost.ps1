@@ -1,14 +1,19 @@
 $appDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$env:Path = "$env:USERPROFILE\scoop\shims;$env:Path"
+$env:Path = "C:\php;$env:USERPROFILE\scoop\shims;$env:Path"
 
-$portInUse = netstat -ano | Select-String ':8000'
-if (-not $portInUse) {
-    Write-Host 'IdeaPost サーバーを起動中...'
-    Start-Process -FilePath 'php' -ArgumentList 'artisan', 'serve', '--quiet' -WorkingDirectory $appDir -WindowStyle Hidden
-    Start-Sleep -Seconds 2
+$phpPath = 'php'
+if (Test-Path 'C:\php\php.exe') {
+    $phpPath = 'C:\php\php.exe'
 }
 
-$url = 'http://127.0.0.1:8000'
+$portInUse = netstat -ano | Select-String ':8190'
+if (-not $portInUse) {
+    Write-Host 'IdeaPost サーバーを起動中...'
+    Start-Process -FilePath $phpPath -ArgumentList 'artisan', 'serve', '--port', '8190', '--quiet' -WorkingDirectory $appDir -WindowStyle Hidden
+    Start-Sleep -Seconds 4
+}
+
+$url = 'http://127.0.0.1:8190'
 $appArg = '--app=' + $url
 
 $edgePath1 = $env:ProgramFiles + '\Microsoft\Edge\Application\msedge.exe'
